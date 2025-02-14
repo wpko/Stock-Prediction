@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+tensorflow
+keras
+joblib
+pandas
+numpy
+matplotlib
+yfinance
