@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import yfinance as yf
 import numpy as np
 import tensorflow as tf
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 import joblib
 import io
 import base64
