@@ -28,22 +28,29 @@ def home():
 
 @app.get('/predict')
 def predict_stock(stock_symbol:str,days:int=30):
-    df = yf.download(stock_symbol,period='60d')
-    data = df[['Close']].values
-    data_scaled = scaler.transform(data)
-    x_input = np.array(data_scaled[-60:])
-    x_input = np.reshape(x_input,(1,60,1))
-    predictions=[]
-    for _ in range(days):
-        pred = model.predict(x_input)
-        predictions.append(pred[0][0])
-        x_input = np.roll(x_input,-1,axis=1)
-        x_input[0,-1,0]=pred[0][0]
-    predicted_price = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
-    return{"prediction":predicted_price.tolist()}
+    try:
+        time.sleep(2)
+        df = yf.download(stock_symbol,period='60d')
+        if df.empty:
+            return{'error:':'Invalid stock symbol or no data available'}
+        data = df[['Close']].values
+        data_scaled = scaler.fit_transform(data)
+        x_input = np.array(data_scaled[-60:])
+        x_input = np.reshape(x_input,(1,60,1))
+        predictions=[]
+        for _ in range(days):
+            pred = model.predict(x_input)
+            predictions.append(pred[0][0])
+            x_input = np.roll(x_input,-1,axis=1)
+            x_input[0,-1,0]=pred[0][0]
+        predicted_price = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
+        return{"prediction":predicted_price.tolist()}
+    except Exception as e:
+        return {"error:": str(e)}
 
 @app.get('/plot')
 def plot_stock(stock_symbol:str,days:int=30):
+    time.sleep(2)
     df = yf.download(stock_symbol,period='60d')
     data = df[['Close']].values
     data_scaled = scaler.transform(data)
