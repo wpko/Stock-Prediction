@@ -7,6 +7,7 @@ import joblib
 import io
 import base64
 import matplotlib.pyplot as plt
+import time
 
 app = FastAPI()
 
