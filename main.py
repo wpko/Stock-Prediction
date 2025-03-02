@@ -75,5 +75,5 @@ def plot_stock(stock_symbol:str,days:int=30):
     plt.close(fig)
     img_buffer.seek(0)
     img_base64 = base64.b64encode(img_buffer.read()).decode('utf-8')
-    return Response(content=f"data:image/png;base64,{img_base64}",media_type="text/plain")
+    return {"image": f"data:image/png;base64,{img_base64}"}
 
