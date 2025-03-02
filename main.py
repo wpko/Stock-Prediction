@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import Response
 import yfinance as yf
 import numpy as np
 import tensorflow as tf
