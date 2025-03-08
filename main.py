@@ -66,6 +66,7 @@ def plot_stock(stock_symbol:str,days:int=30):
         x_input[0,-1,0]=pred[0][0]
     predicted_prices = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
     fig = plt.figure(figsize=(12,6))
+    plt.plot(range(len(data)),data,label="Actual Price",color = 'green')
     plt.plot(predicted_prices,label="Predicted Price", color = 'red')
     plt.xlabel('Days')
     plt.ylabel('Stock Price')
