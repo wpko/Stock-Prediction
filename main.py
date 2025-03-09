@@ -58,7 +58,7 @@ def plot_stock(stock_symbol:str,days:int=10):
         if df.empty:
             return{'error':"Invalid stock symbol or no data available"}
         actual_price = df['Close'].values[-60:]
-        data_scaled = scaler.transform(df[["Close"]].values)
+        data_scaled = scaler.fit_transform(df[["Close"]].values)
         x_input = np.array(data_scaled[-60:])
         x_input = np.reshape(x_input,(1,60,1))
         predictions=[]
@@ -68,9 +68,10 @@ def plot_stock(stock_symbol:str,days:int=10):
             x_input = np.roll(x_input,-1,axis=1)
             x_input[0,-1,0]=pred[0][0]
         predicted_prices = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
+        full_predicted_prices = np.concatenate((actual_price,predicted_prices))
         fig = plt.figure(figsize=(12,6))
         plt.plot(range(60),actual_price,label="Actual Price",color = 'green')
-        plt.plot(range(60,60+days),predicted_prices,label="Predicted Price", color = 'red')
+        plt.plot(range(70),full_predicted_prices,label="Predicted Price", color = 'red')
         plt.xlabel('Days')
         plt.ylabel('Stock Price')
         plt.legend()
