@@ -33,7 +33,7 @@ def home():
 def predict_stock(stock_symbol:str,days:int=30):
     try:
         time.sleep(2)
-        data = yf.download(stock_symbol,period='60d')
+        df = yf.download(stock_symbol,period='60d')
         if df.empty:
             return{'error:':'Invalid stock symbol or no data available'}
         data = df[['Close']].values
@@ -55,7 +55,8 @@ def predict_stock(stock_symbol:str,days:int=30):
 def plot_stock(stock_symbol:str,days:int=10):
     try:
         time.sleep(2)
-        data = yf.download(stock_symbol,period='60d')
+        df = yf.download(stock_symbol,period='60d')
+        data = df[['Close']].values
         scaled_data = scaler.fit_transform(data)
 
         train_size = int(len(scaled_data)*0.8)
