@@ -10,6 +10,7 @@ import base64
 import matplotlib.pyplot as plt
 import time
 
+
 app = FastAPI()
 
 model = load_model('stock_model.h5')
@@ -55,11 +56,30 @@ def plot_stock(stock_symbol:str,days:int=10):
     try:
         time.sleep(2)
         df = yf.download(stock_symbol,period='60d')
+        scaled_data = scaler.fit_transform(data)
+
+        train_size = int(len(scaled_data)*0.8)
+        train_data,test_data = scaled_data[:train_size], scaled_data[train_size:]
+        def create_sequences(dataset,seq_length):
+            x,y = [], []
+            for i in range(len(dataset)-seq_length):
+                x.append(dataset[i:i+seq_length])
+                y.append(dataset[i+seq_length])
+            return np.array(x),np.array(y)
+
+        sequence_length = 60
+        x_train,y_train = create_sequences(train_data,sequence_length)
+        x_test,y_test = create_sequences(test_data,sequence_length)
+
+        x_train = np.reshape(x_train,(x_train.shape[0],x_train.shape[1],1))
+        x_test = np.reshape(x_test,(x_test.shape[0],x_test.shape[1],1))
         if df.empty:
             return{'error':"Invalid stock symbol or no data available"}
+            
         prediction = model.predict(x_test)
         predicted_prices = scaler.inverse_transform(prediction)
         actual_prices = scaler.inverse_transform(y_test.reshape(-1,1))
+        
         fig = plt.figure(figsize=(12,6))
         plt.figure(figsize=(12,6))
         plt.plot(actual_prices,label = "Actual Price",color='blue')
