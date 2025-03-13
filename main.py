@@ -91,7 +91,7 @@ def plot_stock_base64():
     plt.title(f"{stock_symbol} Stock Price Prediction(LMST)")
     plt.xlabel("Days")
     plt.ylabel("Stock Price")
-    plt.lengend()
+    plt.legend()
     img_buffer = io.BytesIO()
     plt.savefig(img_buffer,format='png')
     plt.close(fig)
