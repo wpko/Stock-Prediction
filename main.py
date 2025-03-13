@@ -13,7 +13,7 @@ import uvicorn
 import io
 import base64
 import time
-from tensorflow import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping
 
 early_stopping = EarlyStopping(monitor = 'val_loss',patience=5,restore_best_weights=True)
 
