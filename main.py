@@ -75,7 +75,7 @@ plt.lengend()"""
 app = FastAPI()
 
 from fastapi.middleware.cors import CORSMiddleware
-app.add_middelware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=[''],
     allow_methods = [''],
