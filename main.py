@@ -82,8 +82,12 @@ app.add_middleware(
     allow_headers = ['*'],
 )
 
-@app.get("/plot")
-def plot_stock_base64():
+@app.post("/plot")
+async def plot_stock_base64(request: Request):
+    data = await request.json()
+    stock_symbol = data.get("stock_symbol")
+    if not stock_symbol:
+        return {'error': 'Stock symbol is required'}
     fig = plt.figure(figsize=(12,6))
     plt.figure(figsize=(12,6))
     plt.plot(actual_prices,label = "Actual Price",color='blue')
