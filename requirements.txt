@@ -8,3 +8,4 @@ numpy
 matplotlib
 yfinance
 scikit-learn
+seaborn
