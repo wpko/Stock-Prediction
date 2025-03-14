@@ -9,3 +9,4 @@ matplotlib
 yfinance
 scikit-learn
 seaborn
+pydantic
