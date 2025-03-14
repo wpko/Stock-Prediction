@@ -102,8 +102,9 @@ def predict_stock(stock_symbol:str,days:int=30):
     predicted_price = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
     return{"prediction":predicted_price.tolist()}
 
-@app.get("/plot")
-def plot_stock_base64(stock_symbol:str,days:int=30):
+@app.post("/plot")
+async def plot_stock_base64(request:StockRequest,days:int=30):
+    stock_symbol = request.stock_symbol
     fig = plt.figure(figsize=(12,6))
     plt.figure(figsize=(12,6))
     plt.plot(actual_prices,label = "Actual Price",color='blue')
