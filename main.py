@@ -73,6 +73,8 @@ plt.ylabel("Stock Price")
 plt.lengend()"""
 
 app = FastAPI()
+class StockRequest(BaseModel):
+    stock_symbol: str
 
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
