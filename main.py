@@ -7,7 +7,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from keras.layers import LSTM,Dense,Dropout
 from sklearn.preprocessing import MinMaxScaler
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import pydantic
 import uvicorn
 import io
