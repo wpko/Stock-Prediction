@@ -89,22 +89,6 @@ app.add_middleware(
 def home():
     return {'message':'Stock Prediction API'}
 
-@app.get('/predict')
-def predict_stock(stock_symbol:str,days:int=30):
-    df = yf.download(stock_symbol,period='60d')
-    data = df[['Close']].values
-    data_scaled = scaler.transform(data)
-    x_input = np.array(data_scaled[-60:])
-    x_input = np.reshape(x_input,(1,60,1))
-    predictions=[]
-    for _ in range(days):
-        pred = model.predict(x_input)
-        predictions.append(pred[0][0])
-        x_input = np.roll(x_input,-1,axis=1)
-        x_input[0,-1,0]=pred[0][0]
-    predicted_price = scaler.inverse_transform(np.array(predictions).reshape(-1,1)).flatten()
-    return{"prediction":predicted_price.tolist()}
-
 @app.post("/plot")
 async def plot_stock_base64(request:StockRequest,days:int=30):
     stock_symbol = request.stock_symbol
