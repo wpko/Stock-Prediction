@@ -89,7 +89,7 @@ app.add_middleware(
 def home():
     return {'message':'Stock Prediction API'}
 
-@app.post("/plot")
+@app.post("/plot/")
 async def plot_stock_base64(request:StockRequest,days:int=30):
     stock_symbol = request.stock_symbol
     fig = plt.figure(figsize=(12,6))
