@@ -29,7 +29,7 @@ data = df[['Close']].values
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(data)
 train_size = int(len(scaled_data)*0.8)
-train_data,test_data = scaled_data[:train_size],scaled_data[train_size]
+train_data,test_data = scaled_data[:train_size],scaled_data[train_size:]
 
 def create_sequences(dataset,seq_length):
     x,y = [],[]
