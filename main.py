@@ -35,7 +35,7 @@ def create_sequences(dataset,seq_length):
     x,y = [],[]
     for i in range(len(dataset)-seq_length):
         x.append(dataset[i:i+seq_length])
-        y.append(dataset[i+seq_length],0)
+        y.append(dataset[i+seq_length],)
         return np.array(x),np.array(y)
     
 sequence_length = 60
