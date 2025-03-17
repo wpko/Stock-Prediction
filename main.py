@@ -35,7 +35,7 @@ def create_sequences(dataset,seq_length):
     x,y = [],[]
     for i in range(len(dataset)-seq_length):
         x.append(dataset[i:i+seq_length])
-        y.append(dataset[i+seq_length])
+        y.append(dataset[i+seq_length],0)
         return np.array(x),np.array(y)
     
 sequence_length = 60
@@ -62,7 +62,11 @@ prediction = model.predict(x_test)
 predicted_prices = scaler.inverse_transform(prediction)
 actual_prices = scaler.inverse_transform(y_test.reshape(-1,1))
 rmse = np.sqrt(np.mean((predicted_prices-actual_prices)**2))
+print(f"actual prices shape:{actual_prices.shape}")
+print(f"predicted prices shape:{predicted_prices.shape}")
 print(f"Root Mean Squared Error:{rmse}")
+print("Actual Prices:", actual_prices[:10])
+print("Predicted prices:", predicted_prices[:10])
 
 app = FastAPI()
 class StockRequest(BaseModel):
@@ -84,16 +88,15 @@ def home():
 async def plot_stock_base64(request:StockRequest,days:int=30):
     stock_data = request.dict()
     stock_symbol = stock_data["stock_symbol"]
-    fig = plt.figure(figsize=(12,6))
-    plt.figure(figsize=(12,6))
-    plt.plot(actual_prices,label = "Actual Price",color='blue')
-    plt.plot(predicted_prices,label="Predicted Price",color = 'red')
-    plt.title(f"{stock_symbol} Stock Price Prediction(LMST)")
-    plt.xlabel("Days")
-    plt.ylabel("Stock Price")
-    plt.legend()
+    fig,ax = plt.subplots(figsize=(12,6))
+    ax.plot(actual_prices,label = "Actual Price",color='blue')
+    ax.plot(predicted_prices,label="Predicted Price",color = 'red')
+    ax.set_title(f"{stock_symbol} Stock Price Prediction(LMST)")
+    ax.set_xlabel("Days")
+    ax.set_ylabel("Stock Price")
+    ax.legend()
     img_buffer = io.BytesIO()
-    plt.savefig(img_buffer,format='png')
+    fig.savefig(img_buffer,format='png')
     plt.close(fig)
     img_buffer.seek(0)
     img_base64 = base64.b64encode(img_buffer.getvalue()).decode("utf-8")
