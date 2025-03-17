@@ -29,13 +29,13 @@ data = df[['Close']].values
 scaler = MinMaxScaler(feature_range=(0,1))
 scaled_data = scaler.fit_transform(data)
 train_size = int(len(scaled_data)*0.8)
-train_data,test_data = scaled_data[:train_size],scaled_data[:train_size]
+train_data,test_data = scaled_data[:train_size],scaled_data[train_size]
 
 def create_sequences(dataset,seq_length):
     x,y = [],[]
     for i in range(len(dataset)-seq_length):
         x.append(dataset[i:i+seq_length])
-        y.append(data[i+seq_length])
+        y.append(dataset[i+seq_length])
         return np.array(x),np.array(y)
     
 sequence_length = 60
@@ -64,15 +64,6 @@ actual_prices = scaler.inverse_transform(y_test.reshape(-1,1))
 rmse = np.sqrt(np.mean((predicted_prices-actual_prices)**2))
 print(f"Root Mean Squared Error:{rmse}")
 
-"""fig = plt.figure(figsize=(12,6))
-plt.figure(figsize=(12,6))
-plt.plot(actual_prices,label = "Actual Price",color='blue')
-plt.plot(predicted_prices,label="Predicted Price",color = 'red')
-plt.title(f"{stock_symbol} Stock Price Prediction(LMST)")
-plt.xlabel("Days")
-plt.ylabel("Stock Price")
-plt.lengend()"""
-
 app = FastAPI()
 class StockRequest(BaseModel):
     stock_symbol: str
@@ -80,8 +71,8 @@ class StockRequest(BaseModel):
 from fastapi.middleware.cors import CORSMiddleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods = ['*'],
+    allow_origins=['https://wpko.github.io'],
+    allow_methods = ['POST','GET'],
     allow_headers = ['*'],
 )
 
@@ -91,7 +82,8 @@ def home():
 
 @app.post("/plot/")
 async def plot_stock_base64(request:StockRequest,days:int=30):
-    stock_symbol = request.stock_symbol
+    stock_data = request.dict()
+    stock_symbol = stock_data["stock_symbol"]
     fig = plt.figure(figsize=(12,6))
     plt.figure(figsize=(12,6))
     plt.plot(actual_prices,label = "Actual Price",color='blue')
