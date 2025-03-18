@@ -16,6 +16,9 @@ import base64
 import time
 from tensorflow.keras.callbacks import EarlyStopping
 
+model = load_model('stock_model.h5')
+scaler = joblib.load('scaler.pkl')
+
 early_stopping = EarlyStopping(monitor = 'val_loss',patience=5,restore_best_weights=True)
 
 stock_symbol = "AAPL"
@@ -26,7 +29,7 @@ time.sleep(2)
 df = yf.download(stock_symbol,start=start_date,end=end_date)
 
 data = df[['Close']].values
-scaler = MinMaxScaler(feature_range=(0,1))
+
 scaled_data = scaler.fit_transform(data)
 train_size = int(len(scaled_data)*0.8)
 train_data,test_data = scaled_data[:train_size],scaled_data[train_size:]
@@ -48,11 +51,6 @@ x_test = np.reshape(x_test,(x_test.shape[0],x_test.shape[1],1))
 
 print(f"Training Data Shape: {x_train.shape},{y_train.shape}")
 print(f"Testing Data Shape:{x_test.shape},{y_test.shape}")
-
-model = Sequential([LSTM(50,return_sequences=True,input_shape=(sequence_length,1)),Dropout(0.2),LSTM(50,return_sequences=False),Dropout(0.2),Dense(25),Dense(1)])
-
-model.compile(optimizer='adam',loss='mean_squared_error')
-model.summary()
 
 epochs = 50
 batch_size = 64
