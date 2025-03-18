@@ -52,10 +52,6 @@ x_test = np.reshape(x_test,(x_test.shape[0],x_test.shape[1],1))
 print(f"Training Data Shape: {x_train.shape},{y_train.shape}")
 print(f"Testing Data Shape:{x_test.shape},{y_test.shape}")
 
-epochs = 50
-batch_size = 64
-history =model.fit(x_train,y_train,epochs=epochs,batch_size = batch_size , validation_data = (x_test,y_test),callbacks = [early_stopping])
-
 prediction = model.predict(x_test)
 predicted_prices = scaler.inverse_transform(prediction)
 actual_prices = scaler.inverse_transform(y_test.reshape(-1,1))
