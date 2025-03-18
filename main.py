@@ -55,7 +55,7 @@ model.compile(optimizer='adam',loss='mean_squared_error')
 model.summary()
 
 epochs = 50
-batch_size = 128
+batch_size = 64
 history =model.fit(x_train,y_train,epochs=epochs,batch_size = batch_size , validation_data = (x_test,y_test),callbacks = [early_stopping])
 
 prediction = model.predict(x_test)
