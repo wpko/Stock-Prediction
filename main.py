@@ -9,6 +9,7 @@ from keras.layers import LSTM,Dense,Dropout
 from sklearn.preprocessing import MinMaxScaler
 from fastapi import FastAPI, Request
 from pydantic import BaseModel
+import joblib
 import pydantic
 import uvicorn
 import io
